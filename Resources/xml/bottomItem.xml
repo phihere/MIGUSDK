@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Contents>
+  <Content resourceUL="bottom1.png" service="2">b1</Content>
+  <Content resourceUL="bottom3.png" service="4">b3</Content>
+  <Content resourceUL="bottom4.png" service="5">b4</Content>
+  <Content resourceUL="bottom5.png" service="6">b5</Content>
+  <Content resourceUL="bottom6.png" service="7">b6</Content>
+  <Content resourceUL="bottom7.png" service="8">b7</Content>
+</Contents>

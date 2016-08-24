@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Contents>
+  <Content resourceUL="main1.png" service="13" listener="migu_m1">m1</Content>
+  <Content resourceUL="main2.png" service="14" listener="migu_m2">m2</Content>
+  <Content resourceUL="main3.png" service="15" listener="migu_m3">m3</Content>
+  <Content resourceUL="main4.png" service="16">miguMatchItem</Content>
+</Contents>
