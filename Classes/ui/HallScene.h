@@ -6,10 +6,21 @@
 
 #include "cocos2d.h"
 
-#include "PublicDef.h"
+#include "../PublicDef.h"
 #include "../service/ContentService.h"
 #include "../service/HallContent.h"
 #include "HallEventDelegate.h"
+
+#include "WWPlatform/ww_cc_platform.h"
+#include "DDZ/Data/DataDeclaration.h"
+#include "DDZ/Comm/filter/MsgHallDataFilter.h"
+#include "DDZ/Comm/filter/MsgChargeFilter.h"
+#include "DDZ/Scene/GlobalLayer/LordScrollView.h"
+#include "DDZ/Scene/UserScene/UserScene.h"
+#include "DDZ/Scene/HallScene/layer/HallSceneDelegate.h"
+#include "DDZ/Scene//UserScene/UserInfoUpdateDelegate.h"
+
+USING_NS_WW;
 
 MIGU_NS_COCOS
 
@@ -19,12 +30,11 @@ extern const char* Lazi_On_Line;
 extern const char* HuanLe_On_Line;
 extern const char* Match_On_Line;
 extern const char* Bean_Count;
-extern const char* Add_Red_Point;//事件内容填要加红点的节点的名字
+extern const char* Add_Red_Point;//ê??t?úèYì?òa?óoìμ?μ??úμ?μ???×?
 extern const char* Remove_Red_Point; 
 extern const char* Change_Nick_Name;
-extern const char* Change_Gender; //2 是女，1是男
+extern const char* Change_Gender; //2 ê???￡?1ê??D
 extern const char* Change_Avatar;
-
 
 class HallScene : public cocos2d::Scene{
 public:
@@ -34,12 +44,14 @@ public:
 
 	CREATE_FUNC(HallScene);
 
-	void printLog(const char* s){CCLOG(s);}
+	//void printLog(const char* s){CCLOG(s);}
 
 	void setEventDelegate(HallEventDelegate* delegate){eventDelegate = delegate;};
 
 	virtual void onEnter();
 	virtual void onExit();
+	
+
 private:
 	HallEventDelegate* eventDelegate;
 
@@ -48,7 +60,8 @@ private:
 
 	cocos2d::Layer *layer;
 	cocos2d::Label *nicknameLabel;
-	cocos2d::MenuItem *avatarItem;
+
+	cocos2d::Sprite *avatarSprite;
 
 	cocos2d::Sprite *moreMenu;
 	cocos2d::MenuItem *settingItem;
@@ -92,6 +105,10 @@ private:
 	void configureMoreMenu();
 	void showOrHideMoreMenu(bool show);
 	void doHideMoreMenu(float t);
+
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 };
 
 MIGU_NS_COCOS_END

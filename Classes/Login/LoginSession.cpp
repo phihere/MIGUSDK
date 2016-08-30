@@ -16,7 +16,6 @@ void receiveLoginHttpResponse(HttpClient* client, HttpResponse* response);
 void receiveIPHttpResponse(HttpClient* client, HttpResponse* response);
 void receiveUserInfoHttpResponse(HttpClient* client, HttpResponse* response);
 void receiveUpdateUserInfoHttpResponse(HttpClient* client, HttpResponse* response);
-string assembleRequestData();
 
 const char *Ip_List_Server_Url = "http://121.15.156.172:45266/lobbyiplist";
 
@@ -34,7 +33,7 @@ void LoginSession::requestServiceIP(){
 	request->setRequestType(HttpRequest::Type::GET);
 
 	CCLOG("申请服务ip:port");
-	CCLOG(request->getUrl());  
+	//CCLOG(request->getUrl());  
 	
 	auto ccCallBack = bind(&receiveIPHttpResponse, _1, _2);
 	request->setResponseCallback(ccCallBack);
@@ -47,7 +46,7 @@ void receiveIPHttpResponse(HttpClient* client, HttpResponse* response){
 
 	if (!response->isSucceed()){
 		CCLOG("申请服务ip:port，失败");
-		CCLOG(response->getErrorBuffer());
+		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 	}
 
@@ -57,7 +56,7 @@ void receiveIPHttpResponse(HttpClient* client, HttpResponse* response){
 		xmlChar[i] = (*data)[i];
 	}
 	CCLOG("申请服务ip:port，成功");
-	CCLOG(xmlChar);
+	//CCLOG(xmlChar);
 	
 	doc.Parse(xmlChar, data->size());
 	auto xmlRoot = doc.RootElement();
@@ -82,7 +81,7 @@ void receiveLoginHttpResponse(HttpClient* client, HttpResponse* response){
 
 	if (!response->isSucceed()){
 		CCLOG("登录，失败");
-		CCLOG(response->getErrorBuffer());
+		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 	}
 
@@ -93,7 +92,7 @@ void receiveLoginHttpResponse(HttpClient* client, HttpResponse* response){
 		xmlChar[i] = (*data)[i];
 	}
 	CCLOG("登录，成功");
-	CCLOG(xmlChar);
+	//CCLOG(xmlChar);
 
 	doc.Parse(xmlChar, data->size());
 	auto xmlRoot = doc.RootElement();
@@ -122,9 +121,9 @@ void LoginSession::startLogin(const string& ipport){
 
 	CCLOG("发起登录请求");
 	string requestData = LoginCenter::getInstance().getXMLLoginData();
-	CCLOG(requestData.c_str());
+	//CCLOG(requestData.c_str());
 	request->setRequestData(requestData.c_str(), requestData.size());
-	CCLOG(request->getUrl());
+	//CCLOG(request->getUrl());
 	
 	auto ccCallBack = bind(&receiveLoginHttpResponse, _1, _2);
 	request->setResponseCallback(ccCallBack);
@@ -151,8 +150,8 @@ void LoginSession::updateUserInfo(){
 	string result = string(print->CStr());
 	delete print;
 
-	CCLOG(infoUrl.c_str());
-	CCLOG(result.c_str());
+	//CCLOG(infoUrl.c_str());
+	//CCLOG(result.c_str());
 
 	CCLOG("获取用户信息");
 	auto *request = new HttpRequest();
@@ -173,7 +172,7 @@ void receiveUserInfoHttpResponse(HttpClient* client, HttpResponse* response){
 
 	if (!response->isSucceed()){
 		CCLOG("获取用户信息, 失败");
-		CCLOG(response->getErrorBuffer());
+		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 	}
 
@@ -184,7 +183,7 @@ void receiveUserInfoHttpResponse(HttpClient* client, HttpResponse* response){
 		xmlChar[i] = (*data)[i];
 	}
 	CCLOG("获取用户信息, 成功");
-	CCLOG(xmlChar);
+	//CCLOG(xmlChar);
 
 	doc.Parse(xmlChar, data->size());
 	auto xmlRoot = doc.RootElement();
@@ -223,7 +222,7 @@ void receiveUpdateUserInfoHttpResponse(HttpClient* client, HttpResponse* respons
 
 	if (!response->isSucceed()){
 		CCLOG("更新用户信息，失败");
-		CCLOG(response->getErrorBuffer());
+		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 		LoginCenter::getInstance().updateUserInfoCallBack(4, "error");
 		return;
@@ -236,7 +235,7 @@ void receiveUpdateUserInfoHttpResponse(HttpClient* client, HttpResponse* respons
 		xmlChar[i] = (*data)[i];
 	}
 	CCLOG("更新用户信息，成功");
-	CCLOG(xmlChar);
+	//CCLOG(xmlChar);
 
 	doc.Parse(xmlChar, data->size());
 	auto xmlRoot = doc.RootElement();

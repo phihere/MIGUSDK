@@ -15,11 +15,13 @@ public:
 	std::string getResourceURL() const {return resourceURL;}
 	std::string getName() const {return name;}
 	std::string getEventKey() const {return eventKey;}
+	std::string getResourcePURL() const { return resourcePURL; }
 	ServiceCode getServiceCode() const {return serviceCode;}
 	int getIndex() const {return index;}
 	void setIndex(int vectorIndex) {index = vectorIndex;}
 private:
 	std::string resourceURL;
+	std::string resourcePURL;
 	std::string name;
 	std::string eventKey;
 	ServiceCode serviceCode;

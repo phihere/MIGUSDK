@@ -8,7 +8,7 @@
 #include "LoginSession.h"
 #include "LoginModel.h"
 
-#include "md5\migu_md5.h"
+#include "../md5/migu_md5.h"
 
 #include "tinyxml2\tinyxml2.h"
 
@@ -104,7 +104,7 @@ std::string LoginCenter::requestIPData() const{
 
 	string origin = string("format=xmlop=") + timeString + string("secret=") + string(Secrect);
 	CCLOG("md5");
-	CCLOG(origin.c_str());
+	//CCLOG(origin.c_str());
 	MD5 md5(origin);
 	auto result =  string("?cid=10001&sid=") + subChannelNoStr + string("&ver=4&os=1") + string("&format=xml&op=") + timeString + string("&sign=") + md5.toStr();
 

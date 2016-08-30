@@ -1,6 +1,6 @@
 #include "ContentService.h"
 #include "HallContent.h"
-
+#include "cocos2d.h"
 #include <iostream>
 
 MIGU_NS_COCOS
@@ -16,8 +16,10 @@ void ContentService::loadRemoteContent(){
 }
 
 void ContentService::loadLocalContent(){
-	doc = new XMLDocument();
-    XMLError errorID = doc->LoadFile(url.c_str());
+	doc = new tinyxml2::XMLDocument();
+	std::string content = cocos2d::FileUtils::getInstance()->getStringFromFile(url);
+    //XMLError errorID = doc->LoadFile(url.c_str());
+	XMLError errorID = doc->Parse(content.c_str());
 	if (errorID){
 		readFail = true;
 		return;

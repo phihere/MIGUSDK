@@ -1,7 +1,8 @@
 #ifndef __HALL_EVENT_DELEGATE_H
 #define __HALL_EVENT_DELEGATE_H
 
-#include "PublicDef.h"
+#include <string>
+#include "../PublicDef.h"
 
 MIGU_NS_COCOS
 
@@ -32,11 +33,17 @@ enum class ServiceCode{
 	ToolKit_Service = 1004, //µ¿æﬂœ‰
 };
 
+enum class GameType {
+	Migu_GuanDan = 0
+};
+
 class HallEventDelegate{
 public:
+	virtual ~HallEventDelegate(){}
 	virtual void uiService(ServiceCode code) = 0;
 	virtual void onEnter() = 0;
 	virtual void onExit() = 0;
+	virtual void lanuchOtherGame(GameType type, const std::string& resourcePath) = 0;
 
 };
 

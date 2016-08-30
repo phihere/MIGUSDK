@@ -5,7 +5,7 @@
 #include <string>
 #include <functional>
 
-#include "./PublicDef.h"
+#include "../PublicDef.h"
 #include "LoginModel.h"
 
 MIGU_NS_COCOS

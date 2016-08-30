@@ -4,6 +4,8 @@
 
 #include "../Login/LoginCenter.h"
 #include "../Login/LoginSession.h"
+#include "HallDialog.h"
+//#include "../service/GameResourceManager.h"
 
 MIGU_NS_COCOS
 
@@ -47,7 +49,32 @@ bool HallScene::init(){
 	Director::getInstance()->getEventDispatcher()->addCustomEventListener(Change_Avatar, eventCallBack);
 
 	showGameHall();
+	configureMoreMenu();
 	startLogin();
+
+	
+
+
+
+// 	auto pListener1 = EventListenerKeyboard::create();
+// 	pListener1->onKeyReleased = CC_CALLBACK_2(HallScene::onKeyReleased, this);
+// 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(pListener1, this);
+
+// 	auto	listener = EventListenerTouchOneByOne::create();
+// 	listener->onTouchBegan = CC_CALLBACK_2(HallScene::onTouchBegan, this);
+// 	listener->setSwallowTouches(true);
+// 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+// 
+// 	m_pListener = EventListenerKeyboard::create();
+// 	m_pListener->onKeyReleased = CC_CALLBACK_2(HallScene::onTouchEnded, this);
+// 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(m_pListener, this);
+
+	auto _touchListener = EventListenerTouchOneByOne::create();
+	_touchListener->setSwallowTouches(true);
+	_touchListener->onTouchBegan = CC_CALLBACK_2(HallScene::onTouchBegan, this);
+	_touchListener->onTouchMoved = CC_CALLBACK_2(HallScene::onTouchMoved, this);
+	_touchListener->onTouchEnded = CC_CALLBACK_2(HallScene::onTouchEnded, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
 
 	return true;
 }
@@ -83,15 +110,14 @@ void HallScene::startLogin(){
 	using namespace std::placeholders;
 
 	auto loginCallBack = bind(&HallScene::loginCallBack, this, _1, _2);
-	LoginCenter::getInstance().registerLoginCallback(loginCallBack);
-	LoginCenter::getInstance().registerLoginDataProvider(loginDataInfo);
+	//LoginCenter::getInstance().registerLoginCallback(loginCallBack);
+	//LoginCenter::getInstance().registerLoginDataProvider(loginDataInfo);
 	auto loginSession = LoginCenter::getInstance().newLoginSession(true);
 	loginSession->login();
 }
 
 void HallScene::loginCallBack(int status, const std::string& loginInfo){
 	if (status == 0){
-		configureMoreMenu();
 	}else{
 	}
 
@@ -134,7 +160,7 @@ shared_ptr<LoginDataInfo> loginDataInfo(){
 }
 
 void HallScene::configureBacground(){
-	auto backSprite = Sprite::create("public_bg.jpg");
+	auto backSprite = Sprite::create("public/public_bg.jpg");
 	CCLOG("%f",visibleSize.width);
 	CCLOG("%f",visibleSize.height);
 	
@@ -144,7 +170,7 @@ void HallScene::configureBacground(){
 
 
 void HallScene::configureSideButton(){
-	ContentService contentService("xml/miscellContent.xml");
+	ContentService contentService("XML/miscellContent.xml");
 	vector<HallContent> items = contentService.loadContent();
 	if (items.size() == 0){
 		return;
@@ -152,11 +178,12 @@ void HallScene::configureSideButton(){
 	auto sideMenu = Menu::create();
 	for (HallContent item : items)
 	{
-		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourceURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
+		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourcePURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
 		float anAnchorX = (item.getIndex() == 0 ? 0 : 1 );
 		float positionX = (item.getIndex() == 0 ? 0 : visibleSize.width );
 		menuItem->setAnchorPoint(Vec2(anAnchorX, 0.5));
 		menuItem->setPosition(positionX , visibleSize.height / 2);
+		menuItem->setTag(static_cast<int>(item.getServiceCode()));
 		sideMenu->addChild(menuItem);
 	}
 
@@ -165,6 +192,10 @@ void HallScene::configureSideButton(){
 }
 
 void HallScene::uiCallback(Ref* sender){
+	if (!eventDelegate) {
+		return;
+	}
+
 	int code = ((Node*)sender) -> getTag();
 	CCLOG("tag is %d", code);
 	if (code == int(ServiceCode::Menu_Service)){
@@ -172,27 +203,40 @@ void HallScene::uiCallback(Ref* sender){
 		showOrHideMoreMenu(showMoreMenu);
 		return;
 	}
+#if 0
+	if (code == int(ServiceCode::Promotion1_Service)){
+		if (GameResourceManager::getInstance().gameHasDownloaded(GameType::Migu_GuanDan)){
+			CCLOG("game has downloaded lanuch");
+			//eventDelegate->lanuchOtherGame(GameType::Migu_GuanDan, GameResourceManager::getInstance().getGameResourcePath(GameType::Migu_GuanDan));
+			return;
+		}
+		if (GameResourceManager::getInstance().isDownloading()){
+			return;
+		}
 
-
-	if (eventDelegate){
-		eventDelegate->uiService((ServiceCode)code);
+		auto dialog = HallDialog::create();
+		using namespace placeholders;
+		dialog->setContent("Please download game, press comfirm if you want to play");
+		dialog->showInLayer(layer);
 	}
+#endif
+	eventDelegate->uiService((ServiceCode)code);
 }
 
 void HallScene::configureMainFrame(){
-	ContentService contentService("xml/mainItem.xml");
+	ContentService contentService("XML/mainItem.xml");
 	vector<HallContent> items = contentService.loadContent();
 
 	auto mainMenu = Menu::create();
 	for (HallContent item : items)
 	{
 
-		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourceURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
-		if (!item.getEventKey().empty()){
+		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourcePURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
+		if (!item.getEventKey().empty()){ 
 			
 			auto label = Label::createWithSystemFont("0", "fonts/arial.ttf", 20,
-                                          Size(200, 20), TextHAlignment::CENTER);
-			label->setPosition(140, 27);
+                                          Size(200, 25), TextHAlignment::CENTER);
+			label->setPosition(140, 24);
 			menuItem->addChild(label);
 			addEventListener(item.getEventKey(), label);
 		}
@@ -210,68 +254,71 @@ void HallScene::configureMainFrame(){
 }
 
 void HallScene::configureHeadFrame(){
-	auto headFrame = Sprite::create("hall_frame_top.png");
+	auto headFrame = Sprite::create("hall/hall_frame_top.png");
 	headFrame->setAnchorPoint(Vec2(0.5, 1));
 	headFrame->setPosition(visibleSize.width / 2, visibleSize.height);
 	layer->addChild(headFrame);
 
-	auto playerPortrait = Sprite::create("playerInfo_propBg.png");
+	auto playerPortrait = Sprite::create("hall/playerInfo_propBg.png");
 	playerPortrait->setAnchorPoint(Vec2(0,1));
 	playerPortrait->setPosition(Vec2(0, visibleSize.height));
 	layer->addChild(playerPortrait);
 
-	auto portraitCircle = Sprite::create("lb_shape_headIcon.png");
-	portraitCircle->setPosition(60,80);
-	playerPortrait->addChild(portraitCircle);
+	avatarSprite = Sprite::create("hall/lb_shape_headIcon.png");
+	avatarSprite->setPosition(60,80);
+	playerPortrait->addChild(avatarSprite);
 
-	auto beanCount = Sprite::create("hall_frame_bean.png");
+	auto beanCount = Sprite::create("hall/hall_frame_bean.png");
 	beanCount->setPosition(Vec2(250, 50));
 	headFrame->addChild(beanCount);
 
-	auto beanLabel = Label::createWithSystemFont("0", "fonts/arial.ttf", 22,
+	auto beanLabel = Label::createWithSystemFont("0", "Arial", 22,
                                           Size(200, 20), TextHAlignment::CENTER);
 	beanLabel->setPosition(120, 25);
 	beanCount->addChild(beanLabel);
 	addEventListener(Bean_Count, beanLabel);
 
-	nicknameLabel  = Label::createWithSystemFont("", "fonts/arial.ttf", 23,
-                                          Size(200, 20), TextHAlignment::CENTER);
+	nicknameLabel  = Label::createWithSystemFont("", "Arial", 23,
+                                          Size(200, 30), TextHAlignment::CENTER);
 	nicknameLabel->setPosition(220, 92);
 	headFrame->addChild(nicknameLabel);
 
+#if 0
 	avatarItem = MenuItem::create(CC_CALLBACK_1(HallScene::uiCallback, this));
-	avatarItem->setContentSize(Size(60, 60));
+	avatarItem->setContentSize(Size(240, 240));
 	avatarItem->setTag(1002);
 	auto userInfoMenu =  Menu::create(avatarItem, nullptr);
 	userInfoMenu->setPosition(Vec2::ZERO);
 	userInfoMenu->setPosition(Vec2(58, 60));
 	portraitCircle->addChild(userInfoMenu);
+#endif
 	
 
-	auto addBeanItem = MenuItemImage::create("hall_btn_add.png", "hall_btn_add.png", CC_CALLBACK_1(HallScene::uiCallback, this));
+	auto addBeanItem = MenuItemImage::create("hall/hall_btn_add.png", "hall/hall_btn_add_p.png", CC_CALLBACK_1(HallScene::uiCallback, this));
 	auto addBeanMenu = Menu::create(addBeanItem, nullptr);
 	addBeanMenu->setPosition(Vec2::ZERO);
 	addBeanItem->setPosition(Vec2(230, 25));
+	addBeanItem->setTag(static_cast<int>(ServiceCode::Add_Bean_Service));
 	beanCount->addChild(addBeanMenu);
 	  
 
-	auto gameTitleBack = Sprite::create("hall_titile_bg.png");
+	auto gameTitleBack = Sprite::create("hall/hall_titile_bg.png");
 	gameTitleBack->setAnchorPoint(Vec2(0.5, 1));
 	gameTitleBack->setPosition(Vec2(visibleSize.width / 2, visibleSize.height));
 	layer->addChild(gameTitleBack);
 
-	auto gameTitle = Sprite::create("game_title.png");
+	auto gameTitle = Sprite::create("hall/game_title.png");
 	gameTitle->setAnchorPoint(Vec2(0.5, 1));
 	gameTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height));
 	layer->addChild(gameTitle);
 
-	ContentService contentService("xml/topItem.xml");
+	ContentService contentService("XML/topItem.xml");
 	vector<HallContent> items = contentService.loadContent();
 
 	auto topMenu = Menu::create();
 	for (HallContent item : items)
 	{
-		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourceURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
+		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourcePURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
 		addRedPoingListener(item.getName(), menuItem);
 		menuItem->setTag((int)item.getServiceCode());
 		float positionX = item.getIndex() * 120 + 850;
@@ -286,31 +333,34 @@ void HallScene::configureHeadFrame(){
 }
 
 void HallScene::configureBottomFrame(){
-	auto bottomFrame = Sprite::create("hall_frame_bottom.png");
+	auto bottomFrame = Sprite::create("hall/hall_frame_bottom.png");
 	bottomFrame->setAnchorPoint(Vec2(0.5, 0));
 	bottomFrame->setPosition(Vec2(visibleSize.width / 2, 0));
 	layer->addChild(bottomFrame);
 
-	ContentService contentService("xml/bottomItem.xml");
+	ContentService contentService("XML/bottomItem.xml");
 	vector<HallContent> items = contentService.loadContent();
 
 	auto bottomMenu = Menu::create();
 	for (HallContent item : items)
 	{
-		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourceURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
+		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourcePURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
 		addRedPoingListener(item.getName(), menuItem);
 		float positionX = item.getIndex() * 150 + 80; 
 		menuItem->setPosition(positionX, 60);
+		menuItem->setTag(static_cast<int>(item.getServiceCode()));
 		bottomMenu->addChild(menuItem);
 	}
 
 	bottomMenu->setPosition(Vec2::ZERO);
 	bottomFrame->addChild(bottomMenu);
 
-	auto quickStart = MenuItemImage::create("quick_start.png","quick_start.png", CC_CALLBACK_1(HallScene::uiCallback, this)); 
+	auto quickStart = MenuItemImage::create("hall/quick_start.png", "hall/quick_start_p.png", CC_CALLBACK_1(HallScene::uiCallback, this)); 
 	quickStart->setAnchorPoint(Vec2(1, 0));
 	quickStart->setPosition(visibleSize.width, 0);
-	layer->addChild(quickStart);
+	quickStart->setTag(static_cast<int>(ServiceCode::Quick_Start_Service));
+	bottomMenu->addChild(quickStart);
+	//addChild(quickStart);
 }
 
 void HallScene::addEventListener(const std::string &event, cocos2d::Label *label){
@@ -372,7 +422,7 @@ void HallScene::addRedPoingListener(const std::string &itemName, cocos2d::MenuIt
 void HallScene::configureRedPoint(cocos2d::MenuItem* item, bool add){
 	if(add){
 		Rect rect =	item->rect();
-		auto redPoint = Sprite::create("redPoint.png");
+		auto redPoint = Sprite::create("hall/redPoint.png");
 		redPoint->setTag(Red_Point_Tag);
 		redPoint->setPosition(rect.size.width - 5, rect.size.height - 5);
 		item->addChild(redPoint);
@@ -383,6 +433,8 @@ void HallScene::configureRedPoint(cocos2d::MenuItem* item, bool add){
 }
 
 void HallScene::changeAvatar(const std::string &path){
+	avatarSprite->removeAllChildren();
+
 	auto avatar = Sprite::create(path);
 	avatar->setScale(0.5);
 	float radius = 60.0f;
@@ -401,20 +453,30 @@ void HallScene::changeAvatar(const std::string &path){
 
 	clipNode->setStencil(circleNode);
 	clipNode->addChild(avatar);
+	clipNode->setPosition(60, 60);
 
-	avatarItem->setPosition(30,30);
-	avatarItem->addChild(clipNode);
+	auto avatarMenuItem = MenuItem::create(CC_CALLBACK_1(HallScene::uiCallback, this));
+	//auto avatarMenuItem = MenuItemImage::create(path, path, CC_CALLBACK_1(HallScene::uiCallback, this));
+	avatarMenuItem->setContentSize(Size(120, 120));
+	avatarMenuItem->setPosition(Vec2(0, 0));
+	avatarMenuItem->setTag((int)ServiceCode::Tap_User_Info);
+	auto userInfoMenu = Menu::create(avatarMenuItem, nullptr);
+	userInfoMenu->setPosition(Vec2::ZERO);
+	clipNode->addChild(userInfoMenu);
+
+	avatarSprite->addChild(clipNode);
+
 }
 
 
 void HallScene::configureMoreMenu(){
-	auto menuBg = Sprite::create("more_btn_bg.png");
+	auto menuBg = Sprite::create("hall/more_btn_bg.png");
 	menuBg->setPosition(1208, -100);
 	hallHead->addChild(menuBg);
 
-	auto placehole = MenuItemImage::create("top3.png", "top3.png", CC_CALLBACK_1(HallScene::uiCallback, this));
-	settingItem = MenuItemImage::create("hall_btn_setting.png", "hall_btn_setting.png", CC_CALLBACK_1(HallScene::uiCallback, this));
-	toolkitItem = MenuItemImage::create("hall_btn_pack.png", "hall_btn_pack.png", CC_CALLBACK_1(HallScene::uiCallback, this));
+	auto placehole = MenuItemImage::create("hall/top3.png", "hall/top3.png", CC_CALLBACK_1(HallScene::uiCallback, this));
+	settingItem = MenuItemImage::create("hall/hall_btn_setting.png", "hall/hall_btn_setting.png", CC_CALLBACK_1(HallScene::uiCallback, this));
+	toolkitItem = MenuItemImage::create("hall/hall_btn_pack.png", "hall/hall_btn_pack.png", CC_CALLBACK_1(HallScene::uiCallback, this));
 	placehole->setTag((int)ServiceCode::Menu_Service);
 	settingItem->setTag((int)ServiceCode::Setting_Service);
 	toolkitItem->setTag((int)ServiceCode::ToolKit_Service);
@@ -449,5 +511,24 @@ void HallScene::showOrHideMoreMenu(bool show){
 void HallScene::doHideMoreMenu(float t){
 	moreMenu->setVisible(false);
 }
+
+bool HallScene::onTouchBegan(Touch *pTouch, Event *pEvent)
+{
+	return true;
+}
+
+void HallScene::onTouchMoved(Touch *pTouch, Event *pEvent)
+{
+
+}
+void HallScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event) {
+	Vec2 pos = touch->getLocation();
+	if (pos.x < 200 && pos.y > 800){
+		if (eventDelegate) {
+			eventDelegate->uiService(ServiceCode::Tap_User_Info);
+		}
+	}
+}
+
 
 MIGU_NS_COCOS_END
