@@ -1,4 +1,4 @@
-#ifndef __LOGIN_SESSION_H
+﻿#ifndef __LOGIN_SESSION_H
 #define __LOGIN_SESSION_H
 
 

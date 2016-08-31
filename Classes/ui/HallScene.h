@@ -1,4 +1,4 @@
-#ifndef __HALL_SCENE_H
+ï»¿#ifndef __HALL_SCENE_H
 #define __HALL_SCENE_H
 
 #include <vector>
@@ -30,11 +30,12 @@ extern const char* Lazi_On_Line;
 extern const char* HuanLe_On_Line;
 extern const char* Match_On_Line;
 extern const char* Bean_Count;
-extern const char* Add_Red_Point;//¨º??t?¨²¨¨Y¨¬?¨°a?¨®o¨¬¦Ì?¦Ì??¨²¦Ì?¦Ì???¡Á?
+extern const char* Add_Red_Point;//Ãª??t?ÃºÃ¨YÃ¬?Ã²a?Ã³oÃ¬Î¼?Î¼??ÃºÎ¼?Î¼???Ã—?
 extern const char* Remove_Red_Point; 
 extern const char* Change_Nick_Name;
-extern const char* Change_Gender; //2 ¨º???¡ê?1¨º??D
+extern const char* Change_Gender; //2 ï¿½ï¿½Å®ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½
 extern const char* Change_Avatar;
+
 
 class HallScene : public cocos2d::Scene{
 public:
@@ -50,8 +51,6 @@ public:
 
 	virtual void onEnter();
 	virtual void onExit();
-	
-
 private:
 	HallEventDelegate* eventDelegate;
 
@@ -66,8 +65,6 @@ private:
 	cocos2d::Sprite *moreMenu;
 	cocos2d::MenuItem *settingItem;
 	cocos2d::MenuItem *toolkitItem;
-
-	//cocos2d::MenuItem *miguMatchItem;
 
 	cocos2d::Sprite *hallHead;
 

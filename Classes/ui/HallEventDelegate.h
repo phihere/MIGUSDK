@@ -1,4 +1,4 @@
-#ifndef __HALL_EVENT_DELEGATE_H
+ï»¿#ifndef __HALL_EVENT_DELEGATE_H
 #define __HALL_EVENT_DELEGATE_H
 
 #include <string>
@@ -8,29 +8,29 @@ MIGU_NS_COCOS
 
 enum class ServiceCode{
 	None_Service = -1,
-	Chat_Service = 0, //ÁÄÌì
-	Single_Game_Service = 1, //µ¥»ú
-	Promotion1_Service = 2, //ÍÆ¹ãÎ»1
-	Promotion2_Service = 3, //ÍÆ¹ãÎ»2
-	Promotion3_Service = 4, //ÍÆ¹ãÎ»3
-	Partner_Service = 5, //ÅÆÓÑ
-	Activity_Service = 6, //»î¶¯
-	Exchange_Service = 7, //¶Ò»»
-	Shop_Service = 8, //ÉÌ³Ç
-	First_Charge_Service = 9, //Ê×³ä
-	Gift_Service = 10, //ËÍ¶¹
-	Message_Service = 11, //ĞÅÏ¢ÖĞĞÄ
-	Menu_Service = 12, //ÏÂÀ­²Ëµ¥
-	LaiZi_Game_Service = 13, //Àµ×Ó¶·µØÖ÷
-	HuanLe_Game_Service = 14, //»¶ÀÖ¶·µØÖ÷
-	Match_Game_Service = 15, //±ÈÈü¶·µØÖ÷
-	MiGu_Game_Service = 16, //ßä¹¾Ô¼Õ½
+	Chat_Service = 0, //èŠå¤©
+	Single_Game_Service = 1, //å•æœº
+	Promotion1_Service = 2, //æ¨å¹¿ä½1
+	Promotion2_Service = 3, //æ¨å¹¿ä½2
+	Promotion3_Service = 4, //æ¨å¹¿ä½3
+	Partner_Service = 5, //ç‰Œå‹
+	Activity_Service = 6, //æ´»åŠ¨
+	Exchange_Service = 7, //å…‘æ¢
+	Shop_Service = 8, //å•†åŸ
+	First_Charge_Service = 9, //é¦–å……
+	Gift_Service = 10, //é€è±†
+	Message_Service = 11, //ä¿¡æ¯ä¸­å¿ƒ
+	Menu_Service = 12, //ä¸‹æ‹‰èœå•
+	LaiZi_Game_Service = 13, //èµ–å­æ–—åœ°ä¸»
+	HuanLe_Game_Service = 14, //æ¬¢ä¹æ–—åœ°ä¸»
+	Match_Game_Service = 15, //æ¯”èµ›æ–—åœ°ä¸»
+	MiGu_Game_Service = 16, //å’ªå’•çº¦æˆ˜
 	
-	Quick_Start_Service = 1000, //¿ìËÙ¿ªÊ¼
-	Add_Bean_Service = 1001, //³äÖµ
-	Tap_User_Info = 1002,   //µã»÷ÓÃ»§Í·Ïñ
-	Setting_Service = 1003,  //ÉèÖÃ
-	ToolKit_Service = 1004, //µÀ¾ßÏä
+	Quick_Start_Service = 1000, //å¿«é€Ÿå¼€å§‹
+	Add_Bean_Service = 1001, //å……å€¼
+	Tap_User_Info = 1002,   //ç‚¹å‡»ç”¨æˆ·å¤´åƒ
+	Setting_Service = 1003,  //è®¾ç½®
+	ToolKit_Service = 1004, //é“å…·ç®±
 };
 
 enum class GameType {

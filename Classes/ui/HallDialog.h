@@ -1,4 +1,4 @@
-#ifndef __HALL_DIALOG_H
+﻿#ifndef __HALL_DIALOG_H
 #define __HALL_DIALOG_H
 
 #include <functional>

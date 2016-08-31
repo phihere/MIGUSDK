@@ -1,11 +1,12 @@
-#include "HallScene.h"
+﻿#include "HallScene.h"
 
 #include <utility>
 
 #include "../Login/LoginCenter.h"
 #include "../Login/LoginSession.h"
 #include "HallDialog.h"
-//#include "../service/GameResourceManager.h"
+#include "../service/GameResourceManager.h"
+
 
 MIGU_NS_COCOS
 
@@ -94,6 +95,7 @@ HallScene::~HallScene(){
 
 void HallScene::onEnter(){
 	Scene::onEnter();
+
 	if (eventDelegate){
 		eventDelegate->onEnter();
 	}
@@ -110,14 +112,18 @@ void HallScene::startLogin(){
 	using namespace std::placeholders;
 
 	auto loginCallBack = bind(&HallScene::loginCallBack, this, _1, _2);
-	//LoginCenter::getInstance().registerLoginCallback(loginCallBack);
-	//LoginCenter::getInstance().registerLoginDataProvider(loginDataInfo);
+	LoginCenter::getInstance().registerLoginCallback(loginCallBack);
+	LoginCenter::getInstance().registerLoginDataProvider(loginDataInfo);
 	auto loginSession = LoginCenter::getInstance().newLoginSession(true);
 	loginSession->login();
 }
 
 void HallScene::loginCallBack(int status, const std::string& loginInfo){
 	if (status == 0){
+		auto  laiziUserdataStr = "12342";
+		auto  changeAvatarStr = "miguhall/test1.png";
+		Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(Lazi_On_Line, &laiziUserdataStr);
+		Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(Change_Avatar,&changeAvatarStr);
 	}else{
 	}
 
@@ -203,7 +209,7 @@ void HallScene::uiCallback(Ref* sender){
 		showOrHideMoreMenu(showMoreMenu);
 		return;
 	}
-#if 0
+
 	if (code == int(ServiceCode::Promotion1_Service)){
 		if (GameResourceManager::getInstance().gameHasDownloaded(GameType::Migu_GuanDan)){
 			CCLOG("game has downloaded lanuch");
@@ -219,7 +225,7 @@ void HallScene::uiCallback(Ref* sender){
 		dialog->setContent("Please download game, press comfirm if you want to play");
 		dialog->showInLayer(layer);
 	}
-#endif
+
 	eventDelegate->uiService((ServiceCode)code);
 }
 
@@ -283,15 +289,6 @@ void HallScene::configureHeadFrame(){
 	nicknameLabel->setPosition(220, 92);
 	headFrame->addChild(nicknameLabel);
 
-#if 0
-	avatarItem = MenuItem::create(CC_CALLBACK_1(HallScene::uiCallback, this));
-	avatarItem->setContentSize(Size(240, 240));
-	avatarItem->setTag(1002);
-	auto userInfoMenu =  Menu::create(avatarItem, nullptr);
-	userInfoMenu->setPosition(Vec2::ZERO);
-	userInfoMenu->setPosition(Vec2(58, 60));
-	portraitCircle->addChild(userInfoMenu);
-#endif
 	
 
 	auto addBeanItem = MenuItemImage::create("hall/hall_btn_add.png", "hall/hall_btn_add_p.png", CC_CALLBACK_1(HallScene::uiCallback, this));
@@ -309,7 +306,7 @@ void HallScene::configureHeadFrame(){
 
 	auto gameTitle = Sprite::create("hall/game_title.png");
 	gameTitle->setAnchorPoint(Vec2(0.5, 1));
-	gameTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height));
+	gameTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 10));
 	layer->addChild(gameTitle);
 
 	ContentService contentService("XML/topItem.xml");
@@ -347,8 +344,8 @@ void HallScene::configureBottomFrame(){
 		auto menuItem = MenuItemImage::create(item.getResourceURL(), item.getResourcePURL(),CC_CALLBACK_1(HallScene::uiCallback, this));
 		addRedPoingListener(item.getName(), menuItem);
 		float positionX = item.getIndex() * 150 + 80; 
+		menuItem->setTag((int)item.getServiceCode());
 		menuItem->setPosition(positionX, 60);
-		menuItem->setTag(static_cast<int>(item.getServiceCode()));
 		bottomMenu->addChild(menuItem);
 	}
 
@@ -373,6 +370,12 @@ void HallScene::addEventListener(const std::string &event, cocos2d::Label *label
 
 void HallScene::onEvent(EventCustom* event){
 	char* userData = (char*)(event->getUserData());
+	if (!userData)
+	{
+		WW_LOG_ERROR("HallScene::onEvent userData is null");
+		return;
+	}
+	CCLOG("HallScene::onEvent USERDAT string ==%s",userData);
 	std::string eventName = event->getEventName();
 	
 	if (eventName == std::string(Add_Red_Point) || eventName == std::string(Remove_Red_Point)){
@@ -436,6 +439,11 @@ void HallScene::changeAvatar(const std::string &path){
 	avatarSprite->removeAllChildren();
 
 	auto avatar = Sprite::create(path);
+	if (!avatar)
+	{
+		WW_LOG_ERROR("HallScene::changeAvatar SPRITE IS NULL");
+		return;
+	}
 	avatar->setScale(0.5);
 	float radius = 60.0f;
 	auto clipNode = ClippingNode::create();

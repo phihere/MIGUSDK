@@ -1,4 +1,4 @@
-#include "LoginSession.h"
+ï»¿#include "LoginSession.h"
 
 #include "cocos2d.h"
 #include "network/HttpClient.h"
@@ -32,7 +32,7 @@ void LoginSession::requestServiceIP(){
 	request->setUrl(url.c_str());
 	request->setRequestType(HttpRequest::Type::GET);
 
-	CCLOG("ÉêÇë·þÎñip:port");
+	CCLOG("ç”³è¯·æœåŠ¡ip:port");
 	//CCLOG(request->getUrl());  
 	
 	auto ccCallBack = bind(&receiveIPHttpResponse, _1, _2);
@@ -45,9 +45,11 @@ void receiveIPHttpResponse(HttpClient* client, HttpResponse* response){
 	tinyxml2::XMLDocument doc;
 
 	if (!response->isSucceed()){
-		CCLOG("ÉêÇë·þÎñip:port£¬Ê§°Ü");
+		CCLOG("ç”³è¯·æœåŠ¡ip:portï¼Œå¤±è´¥");
 		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
+		LoginCenter::getInstance().loginResponse(4,"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ip:portï¿½ï¿½Ê§ï¿½ï¿½");
+		return;
 	}
 
 	auto data = response->getResponseData();
@@ -55,7 +57,7 @@ void receiveIPHttpResponse(HttpClient* client, HttpResponse* response){
 	for(int i = 0; i < data->size(); ++i){
 		xmlChar[i] = (*data)[i];
 	}
-	CCLOG("ÉêÇë·þÎñip:port£¬³É¹¦");
+	CCLOG("ç”³è¯·æœåŠ¡ip:portï¼ŒæˆåŠŸ");
 	//CCLOG(xmlChar);
 	
 	doc.Parse(xmlChar, data->size());
@@ -80,7 +82,7 @@ void receiveLoginHttpResponse(HttpClient* client, HttpResponse* response){
 	tinyxml2::XMLDocument doc;
 
 	if (!response->isSucceed()){
-		CCLOG("µÇÂ¼£¬Ê§°Ü");
+		CCLOG("ç™»å½•ï¼Œå¤±è´¥");
 		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 	}
@@ -91,7 +93,7 @@ void receiveLoginHttpResponse(HttpClient* client, HttpResponse* response){
 
 		xmlChar[i] = (*data)[i];
 	}
-	CCLOG("µÇÂ¼£¬³É¹¦");
+	CCLOG("ç™»å½•ï¼ŒæˆåŠŸ");
 	//CCLOG(xmlChar);
 
 	doc.Parse(xmlChar, data->size());
@@ -119,7 +121,7 @@ void LoginSession::startLogin(const string& ipport){
 	request->setUrl((ipport + string("/third_logon_mix.app")).c_str());
 	request->setRequestType(HttpRequest::Type::POST);
 
-	CCLOG("·¢ÆðµÇÂ¼ÇëÇó");
+	CCLOG("å‘èµ·ç™»å½•è¯·æ±‚");
 	string requestData = LoginCenter::getInstance().getXMLLoginData();
 	//CCLOG(requestData.c_str());
 	request->setRequestData(requestData.c_str(), requestData.size());
@@ -153,7 +155,7 @@ void LoginSession::updateUserInfo(){
 	//CCLOG(infoUrl.c_str());
 	//CCLOG(result.c_str());
 
-	CCLOG("»ñÈ¡ÓÃ»§ÐÅÏ¢");
+	CCLOG("èŽ·å–ç”¨æˆ·ä¿¡æ¯");
 	auto *request = new HttpRequest();
 
 	request->setUrl(infoUrl.c_str());
@@ -171,7 +173,7 @@ void receiveUserInfoHttpResponse(HttpClient* client, HttpResponse* response){
 	tinyxml2::XMLDocument doc;
 
 	if (!response->isSucceed()){
-		CCLOG("»ñÈ¡ÓÃ»§ÐÅÏ¢, Ê§°Ü");
+		CCLOG("èŽ·å–ç”¨æˆ·ä¿¡æ¯, å¤±è´¥");
 		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 	}
@@ -182,7 +184,7 @@ void receiveUserInfoHttpResponse(HttpClient* client, HttpResponse* response){
 
 		xmlChar[i] = (*data)[i];
 	}
-	CCLOG("»ñÈ¡ÓÃ»§ÐÅÏ¢, ³É¹¦");
+	CCLOG("èŽ·å–ç”¨æˆ·ä¿¡æ¯, æˆåŠŸ");
 	//CCLOG(xmlChar);
 
 	doc.Parse(xmlChar, data->size());
@@ -221,7 +223,7 @@ void receiveUpdateUserInfoHttpResponse(HttpClient* client, HttpResponse* respons
 	tinyxml2::XMLDocument doc;
 
 	if (!response->isSucceed()){
-		CCLOG("¸üÐÂÓÃ»§ÐÅÏ¢£¬Ê§°Ü");
+		CCLOG("æ›´æ–°ç”¨æˆ·ä¿¡æ¯ï¼Œå¤±è´¥");
 		//CCLOG(response->getErrorBuffer());
 		CCLOG("%d", (int)response->getResponseCode());
 		LoginCenter::getInstance().updateUserInfoCallBack(4, "error");
@@ -234,7 +236,7 @@ void receiveUpdateUserInfoHttpResponse(HttpClient* client, HttpResponse* respons
 
 		xmlChar[i] = (*data)[i];
 	}
-	CCLOG("¸üÐÂÓÃ»§ÐÅÏ¢£¬³É¹¦");
+	CCLOG("æ›´æ–°ç”¨æˆ·ä¿¡æ¯ï¼ŒæˆåŠŸ");
 	//CCLOG(xmlChar);
 
 	doc.Parse(xmlChar, data->size());

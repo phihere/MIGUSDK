@@ -1,7 +1,7 @@
-#include "HallDialog.h"
+﻿#include "HallDialog.h"
 
 #include "ui/CocosGUI.h"
-//#include "../service/GameResourceManager.h"
+#include "../service/GameResourceManager.h"
 
 MIGU_NS_COCOS
 
@@ -43,7 +43,7 @@ bool HallDialog::init() {
 void HallDialog::comfirmBtnCallback(cocos2d::Ref* sender) {
 	removeFromParent();
 
-//	GameResourceManager::getInstance().downloadGame(GameType::Migu_GuanDan, nullptr);
+	GameResourceManager::getInstance().downloadGame(GameType::Migu_GuanDan, nullptr);
 
 }
 

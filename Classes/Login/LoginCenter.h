@@ -1,4 +1,4 @@
-#ifndef __LOGIN_CENTER_H
+ï»¿#ifndef __LOGIN_CENTER_H
 #define __LOGIN_CENTER_H
 
 #include <memory>
@@ -16,15 +16,15 @@ class LoginDataDelegate;
 typedef std::function<void(int status, const std::string& loginInfo)> LoginCallback;
 
 struct LoginDataInfo{
-	int subChannelNo;  //×ÓÇþµÀºÅ  (±ØÐë)
-	std::string thirdID; //Î±Âë
-	std::string mixThirdID; //»ìºÏµÚÈý·½ID
-	std::string deviceID; //Éè±¸ID
+	int subChannelNo;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  (ï¿½ï¿½ï¿½ï¿½)
+	std::string thirdID; //Î±ï¿½ï¿½
+	std::string mixThirdID; //ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ID
+	std::string deviceID; //ï¿½è±¸ID
 	std::string imsi; //SIM ID
 	std::string iccid; //SIM iccid
-	std::string macID; //mac µØÖ·
-	std::string brand; //ÊÖ»úÆ½Ì¨
-	std::string model; //ÊÖ»úÐÍºÅ
+	std::string macID; //mac ï¿½ï¿½Ö·
+	std::string brand; //ï¿½Ö»ï¿½Æ½Ì¨
+	std::string model; //ï¿½Ö»ï¿½ï¿½Íºï¿½
 };
 
 typedef std::function<std::shared_ptr<LoginDataInfo>()> LoginDataProvider;

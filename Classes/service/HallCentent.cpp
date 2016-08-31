@@ -1,4 +1,4 @@
-#include "HallContent.h"
+﻿#include "HallContent.h"
 
 #include <sstream>
 

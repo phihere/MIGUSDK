@@ -1,10 +1,10 @@
-#ifndef __HALL_CONTENT_H
+﻿#ifndef __HALL_CONTENT_H
 #define __HALL_CONTENT_H
 
 #include <string>
-#include "tinyxml2\tinyxml2.h"
-#include "..\PublicDef.h"
-#include "..\ui\HallEventDelegate.h"
+#include "tinyxml2/tinyxml2.h"
+#include "../PublicDef.h"
+#include "../ui/HallEventDelegate.h"
 
 MIGU_NS_COCOS
 

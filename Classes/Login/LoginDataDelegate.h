@@ -1,4 +1,4 @@
-#ifndef __LOGIN_DATA_DELEGATE_H
+﻿#ifndef __LOGIN_DATA_DELEGATE_H
 #define __LOGIN_DATA_DELEGATE_H
 
 #include <string>

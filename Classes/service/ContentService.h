@@ -1,4 +1,4 @@
-#ifndef __CONTENT_SERVICE_H
+﻿#ifndef __CONTENT_SERVICE_H
 #define __CONTENT_SERVICE_H
 
 #include <vector>
