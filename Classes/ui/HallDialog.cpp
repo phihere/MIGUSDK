@@ -62,7 +62,7 @@ void HallDialog::showInLayer(cocos2d::Layer *layer) {
 void HallDialog::setContent(const std::string& content) {
 	auto negativeLabel = Label::createWithSystemFont(content.c_str(), "fonts/arial.ttf", 30,
 		Size(600, 300), TextHAlignment::CENTER);
-	negativeLabel->setPosition(110, 40);
+	negativeLabel->setPosition(620, 240);
 	backSprite->addChild(negativeLabel);
 }
 

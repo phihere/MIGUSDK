@@ -58,7 +58,7 @@ std::string LoginCenter::getXMLLoginData() const{
 	root->SetAttribute("login_type","0");
 	root->SetAttribute("app_id", "2");
 	root->SetAttribute("app_ver", "0");
-	if (nowSession->mobileUser()){
+	if (info->isMobileUser){
 		root->SetAttribute("third_user_id", info->thirdID.c_str());
 		root->SetAttribute("third_mix_user_id", info->mixThirdID.c_str());
 		root->SetAttribute("third_type", 1);

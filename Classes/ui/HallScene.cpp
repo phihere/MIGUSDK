@@ -190,6 +190,7 @@ void HallScene::configureSideButton(){
 		menuItem->setAnchorPoint(Vec2(anAnchorX, 0.5));
 		menuItem->setPosition(positionX , visibleSize.height / 2);
 		menuItem->setTag(static_cast<int>(item.getServiceCode()));
+		addRedPoingListener(item.getName(), menuItem);
 		sideMenu->addChild(menuItem);
 	}
 
@@ -427,7 +428,7 @@ void HallScene::configureRedPoint(cocos2d::MenuItem* item, bool add){
 		Rect rect =	item->rect();
 		auto redPoint = Sprite::create("hall/redPoint.png");
 		redPoint->setTag(Red_Point_Tag);
-		redPoint->setPosition(rect.size.width - 5, rect.size.height - 5);
+		redPoint->setPosition(rect.size.width * 0.8, rect.size.height  * 0.9);
 		item->addChild(redPoint);
 	}else{
 		item->removeChildByTag(Red_Point_Tag);

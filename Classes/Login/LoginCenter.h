@@ -16,6 +16,7 @@ class LoginDataDelegate;
 typedef std::function<void(int status, const std::string& loginInfo)> LoginCallback;
 
 struct LoginDataInfo{
+	bool isMobileUser;
 	int subChannelNo;  //��������  (����)
 	std::string thirdID; //α��
 	std::string mixThirdID; //��ϵ�����ID
